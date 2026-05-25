@@ -1,25 +1,6 @@
 <div>
     @php
-        $skills = $profile?->skills ?: [
-            'Laravel',
-            'Livewire',
-            'Blade',
-            'Filament V3',
-            'MariaDB',
-            'Docker',
-        ];
-
-        if (is_string($skills)) {
-            $decodedSkills = json_decode($skills, true);
-
-            if (json_last_error() === JSON_ERROR_NONE && is_array($decodedSkills)) {
-                $skills = $decodedSkills;
-            } else {
-                $skills = array_map('trim', explode(',', $skills));
-            }
-        }
-
-        $skills = array_values(array_filter($skills));
+        $skillItems = $skills ?? collect();
 
         $profilePhotoFile = collect([
             'uts_khuma_pict.jpg',
@@ -77,11 +58,19 @@
                 {{ $profile?->headline ?? 'Junior Web Developer' }}
             </p>
 
-            <div class="skill-list">
-                @foreach ($skills as $skill)
-                    <span class="skill">{{ $skill }}</span>
-                @endforeach
-            </div>
+            @if ($skillItems->isNotEmpty())
+                <div class="skill-list">
+                    @foreach ($skillItems as $skill)
+                        <span class="skill">
+                            {{ $skill->name }}
+                        </span>
+                    @endforeach
+                </div>
+            @else
+                <p style="color: var(--muted); margin-top: 18px;">
+                    Belum ada skill yang ditampilkan.
+                </p>
+            @endif
         </div>
     </section>
 
@@ -114,7 +103,7 @@
             <div class="card">
                 <h3>Admin Panel</h3>
                 <p style="color: var(--muted); line-height: 1.7;">
-                    Menggunakan Filament V3 untuk mengelola project, contact message, dan profile.
+                    Menggunakan Filament V3 untuk mengelola project, contact message, profile, dan skills.
                 </p>
             </div>
         </div>
@@ -125,17 +114,25 @@
             <div>
                 <h2 class="section-title">Skill & Tech Stack</h2>
                 <p class="section-desc">
-                    Stack keahlian ini dikelola dari data Profile di admin panel Filament.
+                    Stack keahlian ini dikelola dari menu Skills di admin panel Filament dan ditampilkan dari database.
                 </p>
             </div>
         </div>
 
         <div class="card">
-            <div class="skill-list">
-                @foreach ($skills as $skill)
-                    <span class="skill">{{ $skill }}</span>
-                @endforeach
-            </div>
+            @if ($skillItems->isNotEmpty())
+                <div class="skill-list">
+                    @foreach ($skillItems as $skill)
+                        <span class="skill">
+                            {{ $skill->name }}
+                        </span>
+                    @endforeach
+                </div>
+            @else
+                <div class="empty">
+                    Belum ada skill. Tambahkan dari admin panel Filament.
+                </div>
+            @endif
         </div>
     </section>
 
@@ -188,7 +185,12 @@
                                 </a>
 
                                 @if ($project->repository_url)
-                                    <a href="{{ $project->repository_url }}" target="_blank" class="btn btn-primary">
+                                    <a
+                                        href="{{ $project->repository_url }}"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="btn btn-primary"
+                                    >
                                         GitHub
                                     </a>
                                 @endif
