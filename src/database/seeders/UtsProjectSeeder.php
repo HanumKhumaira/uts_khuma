@@ -41,7 +41,7 @@ class UtsProjectSeeder extends Seeder
             ],
             [
                 'title' => 'Travel Log',
-                'short_description' => 'Website diary liburan untuk mencatat pengalaman perjalanan dan destinasi yang pernah dikunjungi.',
+                'short_description' => 'Sistem diary liburan untuk mencatat pengalaman perjalanan dan destinasi yang pernah dikunjungi.',
                 'description' => 'Travel Log adalah website diary liburan yang dibuat sebagai project pembelajaran semester 3. Website ini digunakan untuk mencatat cerita perjalanan, destinasi, tanggal liburan, dan pengalaman pribadi selama melakukan perjalanan.',
                 'tech_stack' => ['Laravel', 'Blade', 'MariaDB'],
                 'repository_url' => null,
